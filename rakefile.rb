@@ -1,28 +1,8 @@
-namespace :clean do
-  def git_clean_ignore_patterns
-    File.open(".git-clean-ignore", "r") do |f|
-      f.each_line.map(&:chomp)
-    end
-  end
+Dir.glob('tasks/*.rake').each { |r| import r }
 
-  def build_ignore_flags(patterns)
-    patterns.map{ |p| "-e '#{p}'" }.join(' ')
-  end
-
-  git_clean = "git clean"
-  base_flags = "xdf"
-  ignore_flags = build_ignore_flags git_clean_ignore_patterns
-  dry_flag = "n"
-
-  task :clean do
-    sh "#{git_clean} -#{base_flags} #{ignore_flags}"
-  end
-
-  desc "Dry run of `clean:clean`"
-  task :dry do
-    sh "#{git_clean} -#{base_flags}#{dry_flag} #{ignore_flags}"
-  end
+desc "Builds the project"
+task :build => ['nuget:clean', 'nuget:restore'] do
+  # FIXME: Un-hardcode this
+  sln = Dir.glob('*.sln').first
+  sh "MSBuild.exe #{sln} /p:Configuration=Release /target:'Clean;Rebuild'"
 end
-
-desc "Cleans untracked/git-ignored files, except for patterns in `.git-clean-ignore`"
-task :clean => 'clean:clean'
