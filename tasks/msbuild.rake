@@ -1,5 +1,5 @@
 namespace :msbuild do
-  def build(configuration)
+  def _build(configuration)
     sln = Dir.glob('**/*.sln').first
     target = 'Clean;Rebuild'
 
@@ -7,12 +7,12 @@ namespace :msbuild do
   end
 
   task :release => 'nuget:restore' do
-    build 'Release'
+    _build 'Release'
   end
 
   desc 'Run MSBuild for debug configuration'
   task :debug => 'nuget:restore' do
-    build 'Debug'
+    _build 'Debug'
   end
 end
 

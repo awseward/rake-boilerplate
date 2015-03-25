@@ -9,7 +9,7 @@ namespace :clean do
     patterns.map{ |p| "-e '#{p}'" }.join(' ')
   end
 
-  def git_clean(dry_run = false)
+  def _git_clean(dry_run = false)
     clean = "git clean"
     base_flags = "xdf"
     ignore_flags = _build_ignore_flags(_get_ignore_patterns)
@@ -21,12 +21,12 @@ namespace :clean do
   end
 
   task :clean do
-    git_clean false
+    _git_clean false
   end
 
   desc "Dry run of `clean:clean`"
   task :dry do
-    git_clean true
+    _git_clean true
   end
 end
 
