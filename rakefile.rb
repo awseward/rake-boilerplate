@@ -1,4 +1,4 @@
-Dir.glob('tasks/*.rake').each { |r| import r }
+Dir.glob('./tasks/*.rake').each { |r| import r }
 
 desc "Builds the project"
 task :build => ['nuget:clean', 'nuget:restore'] do
